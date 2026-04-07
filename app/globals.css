@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  min-height: 100%;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(255, 173, 125, 0.30), transparent 32%),
+    radial-gradient(circle at top right, rgba(255, 236, 216, 0.95), transparent 28%),
+    linear-gradient(180deg, #fffaf3 0%, #fff2e8 100%);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(24, 35, 58, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(24, 35, 58, 0.03) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.55), transparent 92%);
+  pointer-events: none;
+}
+
+@layer base {
+  * {
+    @apply border-slate-200;
+  }
+
+  ::selection {
+    @apply bg-brand-200 text-ink;
+  }
+}
+
+@layer components {
+  .panel {
+    @apply rounded-[32px] border border-white/70 bg-white/80 shadow-panel backdrop-blur-xl;
+  }
+
+  .field-shell {
+    @apply mt-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm transition focus-within:border-brand-300 focus-within:ring-4 focus-within:ring-brand-100;
+  }
+
+  .field-input {
+    @apply w-full bg-transparent text-sm text-slate-900 outline-none placeholder:text-slate-400;
+  }
+}

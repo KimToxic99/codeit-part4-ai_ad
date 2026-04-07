@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Ad Generator MVP</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div class="hero-copy">
+          <span class="eyebrow">Small Business AI Ad Studio</span>
+          <h1>상품 설명만 입력하면 광고 문구와 광고 이미지를 바로 만듭니다</h1>
+          <p>
+            소상공인이 빠르게 홍보 초안을 만들 수 있도록, 입력과 생성 결과를 한
+            화면에서 연결한 발표용 MVP입니다.
+          </p>
+        </div>
+
+        <div class="hero-stats">
+          <article>
+            <span>Output</span>
+            <strong>3 Ad Copies</strong>
+          </article>
+          <article>
+            <span>Visuals</span>
+            <strong>0-2 Images</strong>
+          </article>
+          <article>
+            <span>Ready</span>
+            <strong>Copy + Download</strong>
+          </article>
+        </div>
+      </header>
+
+      <main class="studio-grid">
+        <section class="panel form-panel">
+          <div class="section-copy">
+            <span class="pill">FastAPI + OpenAI</span>
+            <h2>광고 생성 입력</h2>
+            <p>
+              상품 정보와 원하는 톤을 적으면 광고 문구 3개와 광고 이미지를
+              생성합니다.
+            </p>
+          </div>
+
+          <form id="generator-form" class="form-grid">
+            <label class="field">
+              <span>상품명</span>
+              <input
+                type="text"
+                name="product_name"
+                placeholder="예: 수제 딸기 케이크"
+                required
+              />
+            </label>
+
+            <label class="field">
+              <span>업종</span>
+              <input
+                type="text"
+                name="industry"
+                placeholder="예: 디저트 카페"
+                required
+              />
+            </label>
+
+            <label class="field field-wide">
+              <span>상품 설명</span>
+              <textarea
+                name="description"
+                placeholder="예: 당일 아침 만든 생딸기와 동물성 생크림으로 만든 홀케이크입니다. 기념일 선물용으로 인기가 높고 예약 주문 비중이 높아요."
+                required
+              ></textarea>
+            </label>
+
+            <label class="field">
+              <span>타겟 고객</span>
+              <input
+                type="text"
+                name="target_audience"
+                placeholder="예: 생일 선물을 준비하는 20~30대 직장인"
+                required
+              />
+            </label>
+
+            <label class="field">
+              <span>톤앤매너</span>
+              <input
+                type="text"
+                name="tone"
+                placeholder="예: 따뜻하고 믿음직한"
+                required
+              />
+            </label>
+
+            <fieldset class="field field-wide image-count">
+              <span>이미지 수</span>
+              <div class="segmented">
+                <label>
+                  <input type="radio" name="image_count" value="0" />
+                  <span>0장</span>
+                </label>
+                <label>
+                  <input type="radio" name="image_count" value="1" checked />
+                  <span>1장</span>
+                </label>
+                <label>
+                  <input type="radio" name="image_count" value="2" />
+                  <span>2장</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <button id="submit-button" type="submit" class="primary-button">
+              광고 문구와 이미지 만들기
+            </button>
+          </form>
+        </section>
+
+        <section id="results-panel" class="panel results-panel">
+          <div class="empty-state">
+            <span class="pill muted">Result Preview</span>
+            <h2>한 번의 입력으로 광고 초안을 완성합니다</h2>
+            <p>
+              결과 영역에는 광고 문구 3안, 광고 이미지, 복사 버튼, 다운로드
+              버튼이 순서대로 표시됩니다.
+            </p>
+            <div class="empty-cards">
+              <article>
+                <strong>광고 문구</strong>
+                <p>헤드라인, 본문, CTA가 카드 형식으로 정리됩니다.</p>
+              </article>
+              <article>
+                <strong>광고 이미지</strong>
+                <p>0장 선택 시 생략되고, 1~2장 선택 시 PNG로 저장할 수 있습니다.</p>
+              </article>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <template id="loading-template">
+      <div class="status-block">
+        <span class="pill">생성 중</span>
+        <h2>광고 자산을 생성하고 있습니다</h2>
+        <p>
+          문구 초안과 이미지를 차례대로 만들고 있어요. 이미지 생성까지 포함되면
+          20~40초 정도 걸릴 수 있습니다.
+        </p>
+        <div class="progress-cards">
+          <article>
+            <strong>문구 초안 정리</strong>
+            <p>상품 장점과 타겟 고객을 반영합니다.</p>
+          </article>
+          <article>
+            <strong>광고 문구 3안 생성</strong>
+            <p>헤드라인, 본문, CTA를 구성합니다.</p>
+          </article>
+          <article>
+            <strong>광고 이미지 생성</strong>
+            <p>이미지 수 0장 선택 시 이 단계는 건너뜁니다.</p>
+          </article>
+        </div>
+      </div>
+    </template>
+
+    <template id="error-template">
+      <div class="status-block error">
+        <span class="pill error-pill">오류 발생</span>
+        <h2>생성 중 문제가 생겼습니다</h2>
+        <p data-error-message></p>
+      </div>
+    </template>
+
+    <script src="/static/app.js" defer></script>
+  </body>
+</html>
