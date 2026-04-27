@@ -1,7 +1,7 @@
 # AI Ad Generator
 
 소상공인이 상품 정보를 입력하면 광고 문구와 광고 이미지를 빠르게 생성할 수 있는 웹 서비스 MVP버전 입니다.
-
+[보고서](https://raw.githubusercontent.com/KimToxic99/codeit-part4-ai_ad/blob/main/AI_Ad_Generator_Project_Report.pdf)
 ## Demo
 
 - Live URL: `https://codeit-part4-ai-ad.onrender.com`
